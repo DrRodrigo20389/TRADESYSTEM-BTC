@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TERMINAL MASTER [V21 LAYOUT FIX]</title>
+<title>TERMINAL MASTER [V22 SINAL REAL]</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
@@ -48,11 +48,23 @@
   .panel-box { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 10px; }
   .p-head { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; border-bottom: 1px solid #ffffff10; padding-bottom: 4px; }
   
-  /* TRADING */
+  /* TRADING INTELLIGENCE */
   .rec-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 4px; padding: 10px; text-align: center; transition: 0.2s; }
-  .rec-title { font-size: 9px; color: var(--muted); font-weight: bold; letter-spacing: 1px; }
-  .rec-action { font-size: 14px; font-weight: 900; margin: 4px 0; font-family: var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .rec-detail { font-size: 11px; color: #fff; opacity: 0.9; font-weight: bold; }
+  .rec-title { font-size: 9px; color: var(--muted); font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
+  .rec-action { font-size: 16px; font-weight: 900; margin: 4px 0; font-family: var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rec-detail { font-size: 10px; color: #aaa; margin-bottom: 6px; }
+  
+  .rec-prob { 
+      border-top: 1px solid #333; 
+      margin-top: 6px; 
+      padding-top: 6px; 
+      font-size: 10px; 
+      color: var(--quantum); 
+      font-weight: bold; 
+      display: flex; 
+      justify-content: space-between;
+  }
+
   .heat-bar { height: 10px; background: linear-gradient(90deg, #0011ff, #00a8ff, #00c7a7, #27e46d, #ff0062); border-radius: 5px; position: relative; margin: 10px 0; }
   .heat-ptr { position: absolute; top: -2px; width: 4px; height: 14px; background: #fff; box-shadow: 0 0 8px #fff; border-radius: 2px; transition: left 0.1s; }
   .gauge-row { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
@@ -87,41 +99,12 @@
   .proj-val { font-size: 16px; font-weight: bold; color: var(--quantum); text-align: right; }
   .proj-sub { font-size: 9px; color: #888; text-align: right; margin-top: 2px; }
 
-  /* ESTILO DESTAQUE DO TURNO (CORRIGIDO PARA NÃO VAZAR) */
-  .turno-highlight {
-      border: 2px solid var(--buy);
-      background: rgba(0, 255, 157, 0.08);
-      padding: 10px;
-  }
-  .turno-highlight .input-group {
-      display: grid; /* Mágica do Grid para não vazar */
-      grid-template-columns: 1fr 105px 40px; /* Valor elástico | Data Fixa | Botão Fixo */
-      gap: 5px;
-  }
-  .turno-highlight input {
-      height: 40px;
-      font-size: 14px;
-      font-weight: bold;
-      border-color: #005f3a;
-      width: 100%; /* Garante que respeite o grid */
-  }
-  .turno-highlight button {
-      height: 40px;
-      font-size: 14px;
-      width: 100%;
-      background: var(--buy);
-      color: #000;
-      box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
-  }
-  .turno-label {
-      color: var(--buy);
-      font-size: 11px;
-      font-weight: 900;
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: 4px;
-      letter-spacing: 0.5px;
-  }
+  /* ESTILO DESTAQUE DO TURNO (GRID FIX) */
+  .turno-highlight { border: 2px solid var(--buy); background: rgba(0, 255, 157, 0.08); padding: 10px; }
+  .turno-highlight .input-group { display: grid; grid-template-columns: 1fr 105px 40px; gap: 5px; }
+  .turno-highlight input { height: 40px; font-size: 14px; font-weight: bold; border-color: #005f3a; width: 100%; }
+  .turno-highlight button { height: 40px; font-size: 14px; width: 100%; background: var(--buy); color: #000; box-shadow: 0 0 10px rgba(0, 255, 157, 0.3); }
+  .turno-label { color: var(--buy); font-size: 11px; font-weight: 900; text-transform: uppercase; display: block; margin-bottom: 4px; letter-spacing: 0.5px; }
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-thumb { background: #333; }
@@ -131,7 +114,7 @@
 
 <div class="cockpit">
   <header>
-    <div class="logo">TERMINAL MASTER [V21]</div>
+    <div class="logo">TERMINAL MASTER [V22]</div>
     <div class="live-dot"></div>
     <div class="ctrl">
       <label>TF</label>
@@ -161,9 +144,14 @@
     <div class="panel-box" style="border-color: #00b4d8;">
       <div class="p-head">🧠 INTELIGÊNCIA DE APORTE</div>
       <div class="rec-box" id="recBox">
-        <div class="rec-title">AÇÃO RECOMENDADA</div>
+        <div class="rec-title">ÚLTIMO SINAL (CONFIRMADO)</div>
         <div class="rec-action" id="recAct">AGUARDANDO...</div>
-        <div class="rec-detail" id="recDet">Sincronizando...</div>
+        <div class="rec-detail" id="recDet">Carregando histórico...</div>
+        
+        <div class="rec-prob">
+           <span>ZONA ATUAL:</span>
+           <span id="zoneProb" style="color:#fff">--</span>
+        </div>
       </div>
     </div>
 
@@ -266,10 +254,10 @@
 
 <script>
 // ============================================================
-// MODULO FINANCEIRO (V21)
+// MODULO FINANCEIRO (V22)
 // ============================================================
 const FERIADOS_STOP = ["2026-01-01", "2026-02-16", "2026-02-17", "2026-04-03", "2026-04-21", "2026-05-01", "2026-06-24", "2026-07-02", "2026-09-07", "2026-10-12", "2026-11-02", "2026-11-15", "2026-12-25"];
-let db = JSON.parse(localStorage.getItem('blindagem_quantum_final_v21')) || { tesouroTotal: 0, logsMes: [], historicoLogs: [] };
+let db = JSON.parse(localStorage.getItem('blindagem_quantum_final_v22')) || { tesouroTotal: 0, logsMes: [], historicoLogs: [] };
 let finChart;
 let globalCaixaReais = 0; 
 let globalSatsTotal = 0; 
@@ -279,7 +267,7 @@ let lastKnownPrice = parseFloat(localStorage.getItem('btc_last_price')) || 60000
 let livePrice = lastKnownPrice;
 
 function saveFin() { 
-    localStorage.setItem('blindagem_quantum_final_v21', JSON.stringify(db)); 
+    localStorage.setItem('blindagem_quantum_final_v22', JSON.stringify(db)); 
     renderFinFull(); 
     updateLiveCalculations(); 
 }
@@ -628,45 +616,42 @@ function updateLiveCalculations() {
    document.getElementById('sigmaVal').innerText = (z>0?"+":"")+z.toFixed(2)+"σ";
    document.getElementById('heatPtr').style.left = `${Math.max(0, Math.min(100, ((z+3.5)/7)*100))}%`;
    
+   // 1. LÓGICA DO ÚLTIMO SINAL (O que está no gráfico)
+   const box = document.getElementById('recBox'); 
+   const act = document.getElementById('recAct'); 
+   const det = document.getElementById('recDet');
+   
+   if(signals.length > 0) {
+       const lastSig = signals[signals.length-1];
+       const style = LEVELS[lastSig.t];
+       const isBuy = lastSig.t.startsWith('C');
+       const val = brl * style.p;
+       const color = style.color;
+       
+       box.style.borderColor = color;
+       box.style.background = isBuy ? "rgba(0,100,255,0.15)" : "rgba(0,255,0,0.15)";
+       
+       act.innerText = isBuy ? `COMPRA ${lastSig.t}` : `VENDA ${lastSig.t}`;
+       act.style.color = color;
+       
+       det.innerText = `Sinal em: ${new Date(lastSig.x).toLocaleDateString()} @ R$ ${lastSig.y.toFixed(0)}`;
+   } else {
+       act.innerText = "AGUARDANDO DADOS";
+       det.innerText = "Carregando candles...";
+   }
+
+   // 2. LÓGICA DA ZONA ATUAL (Probabilidade)
    let lvl = null;
    const keys = Object.keys(LEVELS).sort((a,b)=>Math.abs(LEVELS[b].s)-Math.abs(LEVELS[a].s));
    for(let k of keys) { if(Math.abs(z - LEVELS[k].s) < 0.25) { lvl = LEVELS[k]; lvl.code = k; break; } }
    
-   let displayLvl = lvl;
-   let mode = 'LIVE'; 
-   if(!displayLvl && signals.length > 0) {
-       const lastSig = signals[signals.length-1];
-       displayLvl = LEVELS[lastSig.t];
-       displayLvl.code = lastSig.t;
-       mode = 'HIST';
-   }
-
-   const box = document.getElementById('recBox'); 
-   const act = document.getElementById('recAct'); 
-   const det = document.getElementById('recDet');
-
-   if(displayLvl) {
-       const isBuy = displayLvl.s < 0;
-       const prefix = mode === 'HIST' ? 'ÚLTIMO: ' : '';
-       if(isBuy) {
-           const val = brl * displayLvl.p;
-           box.style.borderColor = displayLvl.color; 
-           box.style.background = "rgba(0,100,255,0.15)";
-           act.innerText = `${prefix}COMPRAR ${displayLvl.code}`; 
-           act.style.color = displayLvl.color;
-           det.innerText = `APORTAR R$ ${val.toFixed(2)}`;
-       } else {
-           const targetBRL = brl * displayLvl.p;
-           box.style.borderColor = displayLvl.color; 
-           box.style.background = "rgba(0,255,0,0.15)";
-           act.innerText = `${prefix}ACUMULAR REAL ${displayLvl.code}`;
-           act.style.color = displayLvl.color;
-           det.innerText = `META: +R$ ${targetBRL.toFixed(2)}`;
-       }
+   const zoneSpan = document.getElementById('zoneProb');
+   if(lvl) {
+       zoneSpan.innerText = `${lvl.code} (≈ ${lvl.desc})`;
+       zoneSpan.style.color = lvl.color;
    } else {
-       box.style.borderColor = "#444"; box.style.background = "rgba(0,0,0,0.3)";
-       act.innerText = "AGUARDAR"; act.style.color = "#fff";
-       det.innerText = `Sem sinal (${z.toFixed(2)}σ)`;
+       zoneSpan.innerText = "NEUTRO";
+       zoneSpan.style.color = "#999";
    }
 
    const volPct = (lastATR / livePrice) * 1000;
