@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TERMINAL MASTER [V22 SINAL REAL]</title>
+<title>TERMINAL MASTER [V25 DATA FIX]</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0"></script>
@@ -13,7 +13,7 @@
   :root { 
     --bg: #030711; --panel: #070d19; --card: #0b111f; --text: #c9d7f2; 
     --muted: #637599; --accent: #f7931a; --border: #1a243f; 
-    --buy: #00ff9d; --sell: #ff2a55; 
+    --buy: #00ff9d; --accumulate: #d400ff; 
     --gold: #ffd700; --quantum: #00d4ff; --warning: #ffaa00;
     --font: 'Inter', system-ui, sans-serif; --mono: 'Consolas', monospace; 
   }
@@ -40,7 +40,6 @@
   label { color: var(--muted); font-size: 8px; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
   select, input { background: #040812; border: 1px solid #1e2d4a; color: #fff; padding: 2px 6px; border-radius: 4px; font-family: var(--mono); font-size: 11px; }
 
-  /* COLUNAS */
   .chart-area { position: relative; background: #050a13; border-right: 1px solid var(--border); overflow: hidden; }
   .indicators-area { background: var(--panel); border-right: 1px solid var(--border); padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
   .finance-area { background: #080c14; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
@@ -48,22 +47,12 @@
   .panel-box { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 10px; }
   .p-head { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; border-bottom: 1px solid #ffffff10; padding-bottom: 4px; }
   
-  /* TRADING INTELLIGENCE */
+  /* TRADING */
   .rec-box { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 4px; padding: 10px; text-align: center; transition: 0.2s; }
   .rec-title { font-size: 9px; color: var(--muted); font-weight: bold; letter-spacing: 1px; text-transform: uppercase; }
   .rec-action { font-size: 16px; font-weight: 900; margin: 4px 0; font-family: var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .rec-detail { font-size: 10px; color: #aaa; margin-bottom: 6px; }
-  
-  .rec-prob { 
-      border-top: 1px solid #333; 
-      margin-top: 6px; 
-      padding-top: 6px; 
-      font-size: 10px; 
-      color: var(--quantum); 
-      font-weight: bold; 
-      display: flex; 
-      justify-content: space-between;
-  }
+  .rec-detail { font-size: 11px; color: #fff; font-weight: bold; margin-bottom: 6px; }
+  .rec-prob { border-top: 1px solid #333; margin-top: 6px; padding-top: 6px; font-size: 10px; color: var(--quantum); font-weight: bold; display: flex; justify-content: space-between; }
 
   .heat-bar { height: 10px; background: linear-gradient(90deg, #0011ff, #00a8ff, #00c7a7, #27e46d, #ff0062); border-radius: 5px; position: relative; margin: 10px 0; }
   .heat-ptr { position: absolute; top: -2px; width: 4px; height: 14px; background: #fff; box-shadow: 0 0 8px #fff; border-radius: 2px; transition: left 0.1s; }
@@ -73,7 +62,6 @@
   .sig-item { display: grid; grid-template-columns: 50px 30px 1fr; padding: 4px 6px; border-bottom: 1px solid #ffffff05; cursor: pointer; font-size: 10px; }
   .sig-item:hover { background: #ffffff05; }
 
-  /* FINANCEIRO & IMPACTO */
   .fin-label { color: #666; font-size: 9px; text-transform: uppercase; display: block; margin-bottom: 2px; }
   .val-gold { color: var(--gold); font-size: 20px; font-weight: bold; line-height: 1.1; font-family: var(--mono); }
   .val-fiat { color: #cfcfcf; font-size: 12px; font-weight: 600; }
@@ -81,9 +69,17 @@
   .sub-val { display: flex; justify-content: space-between; margin-top: 5px; padding-top: 5px; border-top: 1px dashed #333; }
   
   .input-group { display: flex; gap: 5px; margin-top: 5px; align-items: center; }
-  .fin-input { background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 8px; border-radius: 4px; font-size: 12px; width: 100%; }
+  .fin-input { background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 6px; border-radius: 4px; font-size: 11px; width: 100%; height: 28px; }
   
-  .btn { border: none; padding: 8px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; width: 100%; }
+  /* DATA GERAL (Pequeno) */
+  input[type="date"] {
+      font-family: var(--mono);
+      font-size: 11px; 
+      letter-spacing: -0.5px;
+      padding-right: 0;
+  }
+
+  .btn { border: none; padding: 0 8px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 11px; height: 28px; display:flex; align-items:center; justify-content:center; width:100%; }
   .btn-accent { background: var(--buy); color: #000; }
   .btn-btc { background: rgba(247, 147, 26, 0.2); color: var(--accent); border: 1px solid var(--accent); }
   
@@ -93,18 +89,60 @@
   .item { display: flex; justify-content: space-between; align-items: center; padding: 6px 4px; border-bottom: 1px solid #1a1a1a; font-size: 11px; }
   .btn-del { color: var(--sell); font-weight: 900; font-family: var(--mono); cursor: pointer; padding: 2px 8px; border: 1px solid var(--sell); border-radius: 4px; margin-left: 8px; }
   
-  /* PROJEÇÃO (Estilo) */
   .proj-box { border: 1px solid var(--quantum); border-radius: 6px; padding: 8px; margin-bottom: 8px; background: rgba(0, 212, 255, 0.05); }
   .proj-title { font-size: 9px; color: var(--quantum); text-transform: uppercase; font-weight: bold; }
   .proj-val { font-size: 16px; font-weight: bold; color: var(--quantum); text-align: right; }
   .proj-sub { font-size: 9px; color: #888; text-align: right; margin-top: 2px; }
 
-  /* ESTILO DESTAQUE DO TURNO (GRID FIX) */
-  .turno-highlight { border: 2px solid var(--buy); background: rgba(0, 255, 157, 0.08); padding: 10px; }
-  .turno-highlight .input-group { display: grid; grid-template-columns: 1fr 105px 40px; gap: 5px; }
-  .turno-highlight input { height: 40px; font-size: 14px; font-weight: bold; border-color: #005f3a; width: 100%; }
-  .turno-highlight button { height: 40px; font-size: 14px; width: 100%; background: var(--buy); color: #000; box-shadow: 0 0 10px rgba(0, 255, 157, 0.3); }
-  .turno-label { color: var(--buy); font-size: 11px; font-weight: 900; text-transform: uppercase; display: block; margin-bottom: 4px; letter-spacing: 0.5px; }
+  /* === ESTILO DESTAQUE TURNO === */
+  .turno-highlight { border: 2px solid var(--buy); background: rgba(0, 255, 157, 0.08); padding: 12px; }
+  .turno-highlight .input-group { 
+      display: grid; 
+      grid-template-columns: 1fr 90px 45px; /* Ajuste no grid */
+      gap: 6px; 
+  }
+  
+  /* APENAS O CAMPO DE VALOR FICA GRANDE */
+  #valorBruto { 
+      height: 42px; 
+      font-size: 16px; 
+      font-weight: bold; 
+      border-color: #005f3a; 
+      width: 100%; 
+  }
+
+  /* O CAMPO DE DATA FICA PEQUENO E DISCRETO */
+  #dataTurno {
+      height: 42px; /* Altura igual ao botão */
+      font-size: 10px !important; /* LETRA PEQUENA */
+      font-weight: normal;
+      border-color: #005f3a;
+      width: 100%;
+      text-align: center;
+  }
+
+  /* BOTÃO DO TURNO */
+  .turno-highlight button { 
+      height: 42px; 
+      font-size: 14px; 
+      width: 100%; 
+      background: var(--buy); 
+      color: #000; 
+      box-shadow: 0 0 10px rgba(0, 255, 157, 0.3); 
+      border: none; border-radius: 4px; font-weight: 900; cursor: pointer;
+  }
+  .turno-label { color: var(--buy); font-size: 12px; font-weight: 900; text-transform: uppercase; display: block; margin-bottom: 6px; letter-spacing: 0.5px; }
+
+  /* === ESTILO SATS EXTERNO (COMPACTO) === */
+  .sats-highlight { border: 1px dashed var(--accumulate); background: rgba(212, 0, 255, 0.05); padding: 8px; margin-bottom: 8px; }
+  .sats-highlight .input-group { 
+      display: grid; 
+      grid-template-columns: 1fr 90px 35px; 
+      gap: 5px; 
+  }
+  .sats-highlight input { height: 28px; font-size: 11px; border-color: #5a006e; width: 100%; }
+  .sats-label { color: var(--accumulate); font-size: 10px; font-weight: 900; text-transform: uppercase; display: block; margin-bottom: 4px; }
+  .btn-sats { background: var(--accumulate); color: #fff; height: 28px; font-size: 11px; border:none; border-radius:4px; cursor:pointer; font-weight:bold; width: 100%; }
 
   ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-thumb { background: #333; }
@@ -114,7 +152,7 @@
 
 <div class="cockpit">
   <header>
-    <div class="logo">TERMINAL MASTER [V22]</div>
+    <div class="logo">TERMINAL MASTER [V25]</div>
     <div class="live-dot"></div>
     <div class="ctrl">
       <label>TF</label>
@@ -146,8 +184,7 @@
       <div class="rec-box" id="recBox">
         <div class="rec-title">ÚLTIMO SINAL (CONFIRMADO)</div>
         <div class="rec-action" id="recAct">AGUARDANDO...</div>
-        <div class="rec-detail" id="recDet">Carregando histórico...</div>
-        
+        <div class="rec-detail" id="recDet">...</div>
         <div class="rec-prob">
            <span>ZONA ATUAL:</span>
            <span id="zoneProb" style="color:#fff">--</span>
@@ -218,6 +255,15 @@
       </div>
     </div>
 
+    <div class="panel-box sats-highlight">
+      <span class="sats-label">💎 LANÇAR SATS (EXTERNO)</span>
+      <div class="input-group">
+        <input type="number" id="satsExterno" placeholder="Qtd Sats" inputmode="decimal">
+        <input type="date" id="dataSats">
+        <button class="btn-sats" onclick="lancarSatsExtra()">OK</button>
+      </div>
+    </div>
+
     <div class="panel-box" style="border-color: var(--accent);">
       <span class="fin-label" style="color:var(--accent)">CONVERTER CAIXA EM BITCOIN</span>
       <div class="input-group">
@@ -254,10 +300,10 @@
 
 <script>
 // ============================================================
-// MODULO FINANCEIRO (V22)
+// MODULO FINANCEIRO (V25)
 // ============================================================
 const FERIADOS_STOP = ["2026-01-01", "2026-02-16", "2026-02-17", "2026-04-03", "2026-04-21", "2026-05-01", "2026-06-24", "2026-07-02", "2026-09-07", "2026-10-12", "2026-11-02", "2026-11-15", "2026-12-25"];
-let db = JSON.parse(localStorage.getItem('blindagem_quantum_final_v22')) || { tesouroTotal: 0, logsMes: [], historicoLogs: [] };
+let db = JSON.parse(localStorage.getItem('blindagem_quantum_final_v25')) || { tesouroTotal: 0, logsMes: [], historicoLogs: [] };
 let finChart;
 let globalCaixaReais = 0; 
 let globalSatsTotal = 0; 
@@ -267,7 +313,7 @@ let lastKnownPrice = parseFloat(localStorage.getItem('btc_last_price')) || 60000
 let livePrice = lastKnownPrice;
 
 function saveFin() { 
-    localStorage.setItem('blindagem_quantum_final_v22', JSON.stringify(db)); 
+    localStorage.setItem('blindagem_quantum_final_v25', JSON.stringify(db)); 
     renderFinFull(); 
     updateLiveCalculations(); 
 }
@@ -286,19 +332,28 @@ function lancar() {
     saveFin();
 }
 
+function lancarSatsExtra() {
+    const s = parseInt(document.getElementById('satsExterno').value);
+    if (!s || s <= 0) return;
+    db.logsMes.push({ 
+        id: Date.now(), 
+        tipo: 'sats_extra', 
+        valor: 0, 
+        sats: s, 
+        label: `SATS EXTERNO`, 
+        data: document.getElementById('dataSats').value 
+    });
+    document.getElementById('satsExterno').value = '';
+    alert(`${s} Sats adicionados!`);
+    saveFin();
+}
+
 function simularImpacto() {
     const v = parseFloat(document.getElementById('extraInput').value);
     const painel = document.getElementById('painelImpacto');
     const btn = document.getElementById('btnConfirmarSaida');
-    
-    if(!v || v <= 0) {
-        painel.style.display = 'none';
-        btn.style.display = 'none';
-        return;
-    }
-    
-    painel.style.display = 'block';
-    btn.style.display = 'block';
+    if(!v || v <= 0) { painel.style.display = 'none'; btn.style.display = 'none'; return; }
+    painel.style.display = 'block'; btn.style.display = 'block';
     
     if(globalMediaDia > 0) {
         const turnos = (v / globalMediaDia).toFixed(1);
@@ -341,10 +396,7 @@ function exportarJSON() {
 
 function importarJSON(e) {
     const reader = new FileReader();
-    reader.onload = (ev) => { 
-        try { db = JSON.parse(ev.target.result); saveFin(); alert("Dados restaurados!"); } 
-        catch(e) { alert("Erro ao ler arquivo."); }
-    };
+    reader.onload = (ev) => { try { db = JSON.parse(ev.target.result); saveFin(); alert("Dados restaurados!"); } catch(e) { alert("Erro ao ler arquivo."); } };
     reader.readAsText(e.target.files[0]);
 }
 
@@ -394,10 +446,14 @@ function renderFinFull() {
     document.getElementById('historico').innerHTML = db.logsMes.slice().reverse().map(l => {
         let cor = l.valor > 0 ? 'var(--buy)' : 'var(--sell)';
         if(l.tipo === 'btc_buy') cor = 'var(--accent)';
+        if(l.tipo === 'sats_extra') cor = 'var(--accumulate)';
+        
+        let valDisplay = l.valor !== 0 ? l.valor.toFixed(2) : `+${l.sats} sats`;
+        
         return `<div class="item">
            <span>${fmtData(l.data)} - ${l.label}</span>
            <div style="display:flex; align-items:center;">
-             <b style="color:${cor}">${l.valor.toFixed(2)}</b>
+             <b style="color:${cor}">${valDisplay}</b>
              <span class="btn-del" onclick="apagarItem(${l.id})">X</span>
            </div>
         </div>`;
@@ -461,11 +517,11 @@ const LEVELS = {
   'C15': { s: -1.5, p: 0.16, color: '#3366ff', size: 8,  desc: 'COMPRA MÉDIA' },
   'C10': { s: -1.0, p: 0.10, color: '#5588ff', size: 7,  desc: 'COMPRA LEVE' },
   'C05': { s: -0.5, p: 0.06, color: '#77aaff', size: 6,  desc: 'INÍCIO COMPRA' },
-  'V30': { s: 3.0, p: 0.30, color: '#00ff00', size: 14, desc: 'ACÚMULO MÁXIMO' },
-  'V25': { s: 2.5, p: 0.14, color: '#33ff33', size: 12, desc: 'ACÚMULO FORTE' },
-  'V20': { s: 2.0, p: 0.09, color: '#66ff66', size: 10, desc: 'ACÚMULO ALTO' },
-  'V15': { s: 1.5, p: 0.05, color: '#99ff99', size: 8,  desc: 'ACÚMULO MÉDIO' },
-  'V10': { s: 1.0, p: 0.02, color: '#ccffcc', size: 7,  desc: 'ACÚMULO LEVE' },
+  'A30': { s: 3.0, p: 0.30, color: '#00ff00', size: 14, desc: 'ACÚMULO MÁXIMO (A)' },
+  'A25': { s: 2.5, p: 0.14, color: '#33ff33', size: 12, desc: 'ACÚMULO FORTE (A)' },
+  'A20': { s: 2.0, p: 0.09, color: '#66ff66', size: 10, desc: 'ACÚMULO ALTO (A)' },
+  'A15': { s: 1.5, p: 0.05, color: '#99ff99', size: 8,  desc: 'ACÚMULO MÉDIO (A)' },
+  'A10': { s: 1.0, p: 0.02, color: '#ccffcc', size: 7,  desc: 'ACÚMULO LEVE (A)' },
 };
 
 let chart = null;
@@ -574,7 +630,7 @@ function processIndicators() {
   lastATR = atrArr[atrArr.length-1];
 
   signals = [];
-  const prio = { 'C30':6, 'C25':5, 'C20':4, 'C15':3, 'C10':2, 'C05':1, 'V30':6, 'V25':5, 'V20':4, 'V15':3, 'V10':2 };
+  const prio = { 'C30':6, 'C25':5, 'C20':4, 'C15':3, 'C10':2, 'C05':1, 'A30':6, 'A25':5, 'A20':4, 'A15':3, 'A10':2 };
   
   for(let i=200; i<rawData.length; i++) {
      const k=rawData[i]; const b=basis[i]; const d=dev[i]; const atr=atrArr[i];
@@ -586,14 +642,14 @@ function processIndicators() {
      else if(k.l <= b-1.5*d && k.c > b-1.5*d) type='C15';
      else if(k.l <= b-1.0*d && k.c > b-1.0*d) type='C10';
      else if(k.l <= b-0.5*d && k.c > b-0.5*d) type='C05';
-     else if(k.h >= b+3.0*d && k.c < b+3.0*d) type='V30';
-     else if(k.h >= b+2.5*d && k.c < b+2.5*d) type='V25';
-     else if(k.h >= b+2.0*d && k.c < b+2.0*d) type='V20';
-     else if(k.h >= b+1.5*d && k.c < b+1.5*d) type='V15';
-     else if(k.h >= b+1.0*d && k.c < b+1.0*d) type='V10';
+     else if(k.h >= b+3.0*d && k.c < b+3.0*d) type='A30'; 
+     else if(k.h >= b+2.5*d && k.c < b+2.5*d) type='A25';
+     else if(k.h >= b+2.0*d && k.c < b+2.0*d) type='A20';
+     else if(k.h >= b+1.5*d && k.c < b+1.5*d) type='A15';
+     else if(k.h >= b+1.0*d && k.c < b+1.0*d) type='A10';
      
      if(type) {
-         const isSell = type.startsWith('V');
+         const isSell = type.startsWith('A');
          const yPos = isSell ? (k.h + (atr * 4.0)) : (k.l - (atr * 4.0));
          const rot = isSell ? 180 : 0;
          signals.push({x:k.x, y:yPos, t:type, p:prio[type], rot:rot});
@@ -616,7 +672,6 @@ function updateLiveCalculations() {
    document.getElementById('sigmaVal').innerText = (z>0?"+":"")+z.toFixed(2)+"σ";
    document.getElementById('heatPtr').style.left = `${Math.max(0, Math.min(100, ((z+3.5)/7)*100))}%`;
    
-   // 1. LÓGICA DO ÚLTIMO SINAL (O que está no gráfico)
    const box = document.getElementById('recBox'); 
    const act = document.getElementById('recAct'); 
    const det = document.getElementById('recDet');
@@ -631,16 +686,15 @@ function updateLiveCalculations() {
        box.style.borderColor = color;
        box.style.background = isBuy ? "rgba(0,100,255,0.15)" : "rgba(0,255,0,0.15)";
        
-       act.innerText = isBuy ? `COMPRA ${lastSig.t}` : `VENDA ${lastSig.t}`;
+       act.innerText = isBuy ? `COMPRA ${lastSig.t}` : `ACUMULAR ${lastSig.t}`;
        act.style.color = color;
        
-       det.innerText = `Sinal em: ${new Date(lastSig.x).toLocaleDateString()} @ R$ ${lastSig.y.toFixed(0)}`;
+       det.innerHTML = `ALVO: R$ ${val.toFixed(2)}<br><span style='font-size:9px;color:#aaa'>Sinal: ${new Date(lastSig.x).toLocaleDateString()}</span>`;
    } else {
        act.innerText = "AGUARDANDO DADOS";
        det.innerText = "Carregando candles...";
    }
 
-   // 2. LÓGICA DA ZONA ATUAL (Probabilidade)
    let lvl = null;
    const keys = Object.keys(LEVELS).sort((a,b)=>Math.abs(LEVELS[b].s)-Math.abs(LEVELS[a].s));
    for(let k of keys) { if(Math.abs(z - LEVELS[k].s) < 0.25) { lvl = LEVELS[k]; lvl.code = k; break; } }
@@ -737,7 +791,7 @@ function renderChart(basis, dev) {
                               return `🔵 COMPRAR: R$ ${val.toFixed(2)}`;
                           } else {
                               const targetBRL = brl * lvl.p;
-                              return `🟢 ACUMULAR REAL: +R$ ${targetBRL.toFixed(2)}`;
+                              return `🟢 ACUMULAR: Meta +R$ ${targetBRL.toFixed(2)}`;
                           }
                       }
                   }
@@ -795,6 +849,7 @@ async function updateTicker() {
 window.onload = () => {
     document.getElementById('dataTurno').value = new Date().toISOString().split('T')[0];
     document.getElementById('dataGasto').value = new Date().toISOString().split('T')[0];
+    document.getElementById('dataSats').value = new Date().toISOString().split('T')[0];
     renderFinFull(); 
     startEngine();
     setInterval(updateTicker, 2000); 
